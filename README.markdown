@@ -6,7 +6,7 @@ https://github.com/tcdent/php-restclient
 Installation
 -----------
 ``` sh
-$ php composer.phar require tcdent/php-restclient
+$ composer require brycegough/php-restclient
 ```
 
 
@@ -14,10 +14,10 @@ Basic Usage
 -----------
 ``` php
 $api = new RestClient([
-    'base_url' => "https://api.twitter.com/1.1", 
-    'format' => "json", 
+    'base_url' => "https://api.twitter.com/1.1",
+    'format' => "json",
      // https://dev.twitter.com/docs/auth/application-only-auth
-    'headers' => ['Authorization' => 'Bearer '.OAUTH_BEARER], 
+    'headers' => ['Authorization' => 'Bearer '.OAUTH_BEARER],
 ]);
 $result = $api->get("search/tweets", ['q' => "#php"]);
 // GET http://api.twitter.com/1.1/search/tweets.json?q=%23php
@@ -44,7 +44,7 @@ Options can be set upon instantiation, or individually afterword:
 
 ``` php
 $api = new RestClient([
-    'format' => "json", 
+    'format' => "json",
     'user_agent' => "my-application/0.1"
 ]);
 ```
@@ -72,7 +72,7 @@ Other Verbs
 -----------
 You can make a request using any verb by calling `execute()` directly, which accepts four arguments: `url`, `method`, `parameters` and `headers`. All arguments expect the same values as in the convenience methods, with the exception of the additional `method` argument:
 
-`method` `(string)` - HTTP verb to perform the request with. 
+`method` `(string)` - HTTP verb to perform the request with.
 
 
 Response Details
@@ -87,12 +87,12 @@ $response->headers->content_type;
 $response->headers->x_powered_by;
 ```
 
-`info` `(object)` - An object with information about the transaction. Populated by casting `curl_info` to an object. See PHP documentation for more info: http://php.net/manual/en/function.curl-getinfo.php Available attributes are: 
+`info` `(object)` - An object with information about the transaction. Populated by casting `curl_info` to an object. See PHP documentation for more info: http://php.net/manual/en/function.curl-getinfo.php Available attributes are:
 
-    url, content_type, http_code, header_size, request_size, filetime, 
-    ssl_verify_result, redirect_count, total_time, namelookup_time, connect_time, 
-    pretransfer_time, size_upload, size_download, speed_download, speed_upload, 
-    download_content_length, upload_content_length, starttransfer_time, redirect_time, 
+    url, content_type, http_code, header_size, request_size, filetime,
+    ssl_verify_result, redirect_count, total_time, namelookup_time, connect_time,
+    pretransfer_time, size_upload, size_download, speed_download, speed_upload,
+    download_content_length, upload_content_length, starttransfer_time, redirect_time,
     certinfo, primary_ip, primary_port, local_ip, local_port, redirect_url  
 
 `error` `(string)` - cURL error message, if applicable.
@@ -102,15 +102,15 @@ $response->headers->x_powered_by;
 
 Direct Iteration and Response Decoding
 --------------------------------------
-If the the response data format is supported, the response will be decoded 
-and accessible by iterating over the returned instance. When the `format` 
-option is set, it will be used to select the decoder. If no `format` option 
-is provided, an attempt is made to extract it from the response `Content-Type` 
+If the the response data format is supported, the response will be decoded
+and accessible by iterating over the returned instance. When the `format`
+option is set, it will be used to select the decoder. If no `format` option
+is provided, an attempt is made to extract it from the response `Content-Type`
 header. This pattern is configurable with the `format_regex` option.
 
 ``` php
 $api = new RestClient([
-    'base_url' => "http://vimeo.com/api/v2", 
+    'base_url' => "http://vimeo.com/api/v2",
     'format' => "php"
 ]);
 $result = $api->get("tcdent/info");
@@ -127,10 +127,10 @@ var_dump($result['id']);
 
 To access the decoded response as an array, call `decode_response()`.
 
-'json' and 'php' formats are configured to use the built-in `json_decode` 
-and `unserialize` functions, respectively. Overrides and additional 
-decoders can be specified upon instantiation, or individually afterword. 
-Decoder functions take one argument: the raw request body. Lambdas and functions created with `create_function` work, too. 
+'json' and 'php' formats are configured to use the built-in `json_decode`
+and `unserialize` functions, respectively. Overrides and additional
+decoders can be specified upon instantiation, or individually afterword.
+Decoder functions take one argument: the raw request body. Lambdas and functions created with `create_function` work, too.
 
 ``` php
 function my_xml_decoder($data){
@@ -138,7 +138,7 @@ function my_xml_decoder($data){
 }
 
 $api = new RestClient([
-    'format' => "xml", 
+    'format' => "xml",
     'decoders' => ['xml' => "my_xml_decoder"]
 ]);
 ```
@@ -162,7 +162,7 @@ $api->register_decoder('json', function($data){
 
 Duplicate Headers and Parameters
 --------------------------------
-When duplicate (repeated) HTTP headers are received, they are accessible via an indexed array referenced by the shared key. Duplicated headers and parameters may also be constructed in requests using the same format. 
+When duplicate (repeated) HTTP headers are received, they are accessible via an indexed array referenced by the shared key. Duplicated headers and parameters may also be constructed in requests using the same format.
 
 Example (unlikely) response:
 
@@ -206,7 +206,7 @@ Multiple status lines returned in a single response payload are supported, and a
 
 Example response with multiple status lines (truncated):
 
-``` 
+```
 HTTP/1.1 100 Continue
 
 HTTP/1.1 200 OK
@@ -231,7 +231,7 @@ This library will never validate or construct `PATCH JSON` content, but it can b
 ``` php
 $result = $api->execute("http://httpbin.org/patch", 'PATCH',
     json_encode([foo' => 'bar']), [
-        'X-HTTP-Method-Override' => 'PATCH', 
+        'X-HTTP-Method-Override' => 'PATCH',
         'Content-Type' => 'application/json-patch+json']);
 ```
 
@@ -250,5 +250,3 @@ $ phpunit test
 ``` xml
 <php><var name="TEST_SERVER_URL" value="http://localhost:8888"/></php>
 ```
-
-
